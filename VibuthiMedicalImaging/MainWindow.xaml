@@ -1,0 +1,67 @@
+﻿<Window x:Class="VibuthiMedicalImaging.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VibuthiMedicalImaging"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+   
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="100" FrameworkElement.FlowDirection="RightToLeft"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0">Hello</Label>
+        <Label Grid.Row="0" Grid.Column="1">Windows</Label>
+        <Label Grid.Row="0" Grid.Column="2">Users</Label>
+    </Grid>-->
+    <DockPanel>
+        <Grid Width="150" DockPanel.Dock="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+
+
+
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Click="btnLoadScan_Click" Name="btnLoadScan" Margin="5">Load Scan</Button>
+            <ListBox Grid.Row="1" Name="listScans" Margin="5" SelectionChanged="listScans_SelectionChanged" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox  Content="{Binding Text}" 
+          IsChecked="{Binding Checked ,Mode=TwoWay}" Click="scanItemCheckBox_Click"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </Grid>
+        <Grid Width="200" DockPanel.Dock="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"  />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+
+
+            </Grid.RowDefinitions>
+            <Button Name="btnReconstruct" Margin="10" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center">Reconstruct</Button>
+            <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Name="btnShowVCut" Margin="5" Width="80">SHow V-Cut</Button>
+                <TextBlock Name="txtVcut" Width=" 50" Margin="5">150</TextBlock>
+            </StackPanel>
+            <CheckBox Name="chkColorImage"  HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" >Color Image</CheckBox>
+            <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <CheckBox Name="chkThresholdImage" Margin="5">Threshold Image</CheckBox>
+                <TextBlock Name="txtThreshold" Width=" 50" Margin="5">150</TextBlock>
+            </StackPanel>
+
+        </Grid>
+        <Grid >
+           <Image Name="DicomImage" />
+        </Grid>
+        </DockPanel>
+    
+</Window>
