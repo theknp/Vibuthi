@@ -6,3 +6,7 @@
 *.pdb
 *.suo
 /VibuthiMedicalImaging/bin/Debug/VibuthiMedicalImaging.vshost.exe
+*.cache
+Debug
+bin
+Release
