@@ -11,7 +11,7 @@ namespace DicomImageLibrary
 {
     public enum TypeOfDicomFile
     {
-         NotDicom,
+        NotDicom,
         Dicom3File,
         DicomOldTypeFile,
         DicomUnknownTransferSyntax
