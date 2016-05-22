@@ -15,6 +15,8 @@ namespace DicomImageLibrary
         Dicom3File,
         DicomOldTypeFile,
         DicomUnknownTransferSyntax
+
+            // srao test2
     };
 
     public class DicomReader

@@ -24,6 +24,8 @@ namespace DicomImageLibrary
                 dr.DicomFileName = currentFile;
                 dicomImages.Add(dr);
 
+                // srao test branch changes..
+
             });
 
         }
