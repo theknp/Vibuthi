@@ -49,7 +49,7 @@ namespace VibuthiMedicalImaging
 
                 Scan sc = new Scan(odm.SelectedFolder.Path.ToString());
                 
-                listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Path.ToString() + count));
+                listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
                 //DicomImage.Source = sc.Images[0].getBitmap() as ImageSource;
                 // MessageBox.Show(listScans.SelectedItems.Count.ToString());
                 //listScans.ItemsSource = Scans;
