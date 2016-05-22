@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VibuthiMedicalImaging"
+        xmlns:ImagePanelControl1="clr-namespace:DicomImageLibrary;assembly=DicomImageLibrary"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
    
@@ -60,7 +61,7 @@
 
         </Grid>
         <Grid >
-           <Image Name="DicomImage" />
+            <ImagePanelControl1:ImagePanelControl Name="IPcontrol" HorizontalAlignment="Left" Margin="91,98,0,0" VerticalAlignment="Top"/>
         </Grid>
         </DockPanel>
     
