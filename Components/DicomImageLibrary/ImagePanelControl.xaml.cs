@@ -30,32 +30,32 @@ namespace DicomImageLibrary
         List<byte> pix8;
         List<ushort> pix16;
         List<byte> pix24;
-        Bitmap bmp;
-        int hOffset;
-        int vOffset;
-        int hMax;
-        int vMax;
-        int imgWidth;
-        int imgHeight;
-        int panWidth;
-        int panHeight;
+        Bitmap bmp = null;
+        int hOffset = 0;
+        int vOffset = 0;
+        int hMax = 500;
+        int vMax = 500;
+        int imgWidth = 500;
+        int imgHeight = 500;
+        int panWidth = 500;
+        int panHeight = 500;
         bool newImage;
 
         // For Window Level
-        int winMin;
-        int winMax;
-        int winCentre;
-        int winWidth;
-        int winWidthBy2;
-        int deltaX;
-        int deltaY;
+        int winMin = 0;
+        int winMax = 500;
+        int winCentre = 250;
+        int winWidth = 500;
+        int winWidthBy2 = 250;
+        int deltaX = 0;
+        int deltaY = 0;
 
         System.Windows.Point ptWLDown;
-        double changeValWidth;
-        double changeValCentre;
-        bool rightMouseDown;
-        bool imageAvailable;
-        bool signed16Image;
+        double changeValWidth = 500;
+        double changeValCentre = 250;
+        bool rightMouseDown = false;
+        bool imageAvailable = false;
+        bool signed16Image = false;
 
         byte[] lut8;
         byte[] lut16;
@@ -316,8 +316,8 @@ namespace DicomImageLibrary
 
         private void ComputeScrollBarParameters()
         {
-            panWidth = (int)this.Width;
-            panHeight = (int)this.Height;
+            panWidth = (int)this.ActualWidth;
+            panHeight = (int)this.ActualHeight;
 
             hOffset = (panWidth - imgWidth) / 2;
             vOffset = (panHeight - imgHeight) / 2;
@@ -582,6 +582,65 @@ namespace DicomImageLibrary
 
             //hMax = (int)hScrollBar.Maximum - (int)hScrollBar.LargeChange + hScrollBar.SmallChange;
             //vMax = vScrollBar.Maximum - vScrollBar.LargeChange + vScrollBar.SmallChange;
-        }       
+        }
+
+        private void render_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+        // Override the OnRender call to add a Background and Border to the OffSetPanel
+        protected override void OnRender(DrawingContext dc)
+        {
+            //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            //mySolidColorBrush.Color = Colors.LimeGreen;
+            //System.Windows.Media.Pen myPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Blue, 10);
+            //Rect myRect = new Rect(0, 0, 500, 500);
+            //dc.DrawRectangle(mySolidColorBrush, myPen, myRect);
+
+
+            Bitmap newimg = new Bitmap(500, 500);
+            Graphics g = Graphics.FromImage(newimg);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+
+            if (viewSettingsChanged || newImage)
+                g.Clear(System.Drawing.SystemColors.Control);
+
+            if (((bpp == ImageBitsPerPixel.Eight) && (pix8.Count > 0)) ||
+                 ((bpp == ImageBitsPerPixel.Sixteen) && (pix16.Count > 0)) ||
+                 ((bpp == ImageBitsPerPixel.TwentyFour) && (pix24.Count > 0)))
+            {
+                if (viewSettings == ViewSettings.Zoom1_1)
+                {
+                    SetScrollVisibility();
+                    g.DrawImage(bmp, hOffset, vOffset);
+                }
+                else // if(viewSettings == ViewSettings.ZoomToFit)
+                {
+                    ScaleImageKeepingAspectRatio(ref g, bmp, panWidth, panHeight);
+                }
+
+                g.Dispose();
+                Rect myRect = new Rect(0, 0, this.ActualWidth, this.ActualHeight);
+                FormatConvertedBitmap grayBitmapSource = new FormatConvertedBitmap();
+                grayBitmapSource.BeginInit();               
+                grayBitmapSource.Source = CreateBitmapSourceFromBitmap(newimg);
+                grayBitmapSource.EndInit();
+
+                dc.DrawImage(grayBitmapSource, myRect);
+                viewSettingsChanged = false;
+                newImage = false;
+            }
+        }
+        public static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
+        {
+            if (bitmap == null)
+                throw new ArgumentNullException("bitmap");
+
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                bitmap.GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+        }
     }
 }

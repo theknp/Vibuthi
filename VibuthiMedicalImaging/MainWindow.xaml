@@ -7,7 +7,7 @@
         xmlns:ImagePanelControl1="clr-namespace:DicomImageLibrary;assembly=DicomImageLibrary"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-   
+
     <!--<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
@@ -48,21 +48,21 @@
 
 
             </Grid.RowDefinitions>
-            <Button Name="btnReconstruct" Margin="10" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center">Reconstruct</Button>
-            <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Button Name="btnShowVCut" Margin="5" Width="80">SHow V-Cut</Button>
-                <TextBlock Name="txtVcut" Width=" 50" Margin="5">150</TextBlock>
+            <Button Name="btnReconstruct" Margin="17,5,117,26" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">Reconstruct</Button>
+            <StackPanel Orientation="Horizontal" Margin="17,21,33,0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button x:Name="btnShowVCut" Margin="5" Width="80" Content="SHow V-Cut"/>
+                <TextBlock x:Name="txtVcut" Width=" 50" Margin="5"><Run Text="150"/></TextBlock>
             </StackPanel>
-            <CheckBox Name="chkColorImage"  HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" >Color Image</CheckBox>
+            <CheckBox Name="chkColorImage"  HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Margin="17,39,99,47" Height="16" Grid.RowSpan="2" >Color Image</CheckBox>
             <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <CheckBox Name="chkThresholdImage" Margin="5">Threshold Image</CheckBox>
-                <TextBlock Name="txtThreshold" Width=" 50" Margin="5">150</TextBlock>
+                <CheckBox x:Name="chkThresholdImage" Margin="5" Content="Threshold Image"/>
+                <TextBlock x:Name="txtThreshold" Width=" 50" Margin="5"><Run Text="150"/></TextBlock>
             </StackPanel>
 
         </Grid>
         <Grid >
-            <ImagePanelControl1:ImagePanelControl Name="IPcontrol" HorizontalAlignment="Left" Margin="91,98,0,0" VerticalAlignment="Top"/>
+            <ImagePanelControl1:ImagePanelControl Name="IPcontrol" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </Grid>
-        </DockPanel>
-    
+    </DockPanel>
+
 </Window>
