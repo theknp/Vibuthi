@@ -613,6 +613,7 @@ namespace UIControlsLibrary
                 return;
 
             Bitmap newimg = new Bitmap((int)this.ActualWidth, (int)this.ActualHeight );
+
             Graphics g = Graphics.FromImage(newimg);
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 
@@ -641,6 +642,7 @@ namespace UIControlsLibrary
                 grayBitmapSource.EndInit();
 
                 dc.DrawImage(grayBitmapSource, myRect);
+                
                 viewSettingsChanged = false;
                 newimg.Dispose();
                 newImage = false;
@@ -704,9 +706,9 @@ namespace UIControlsLibrary
 
                     if (samplesPerPixel == 1 && bitDepth == 8)
                     {
-                        pixels8.Clear();
-                        pixels16.Clear();
-                        pixels24.Clear();
+                       // pixels8.Clear();
+                       // pixels16.Clear();
+                       // pixels24.Clear();
                         dd.GetPixels8(ref pixels8);
 
                         // This is primarily for debugging purposes, 
@@ -749,9 +751,10 @@ namespace UIControlsLibrary
 
                     if (samplesPerPixel == 1 && bitDepth == 16)
                     {
-                        pixels16.Clear();
-                        pixels8.Clear();
-                        pixels24.Clear();
+                        //pixels16.Clear();
+                        //pixels8.Clear();
+                        //pixels24.Clear();
+
                         dd.GetPixels16(ref pixels16);
 
                         // This is primarily for debugging purposes, 
@@ -797,9 +800,9 @@ namespace UIControlsLibrary
                     if (samplesPerPixel == 3 && bitDepth == 8)
                     {
                         // This is an RGB colour image
-                        pixels8.Clear();
-                        pixels16.Clear();
-                        pixels24.Clear();
+                        //pixels8.Clear();
+                        //pixels16.Clear();
+                        //pixels24.Clear();
                         dd.GetPixels24(ref pixels24);
 
                         // This code segment is primarily for debugging purposes, 
@@ -835,9 +838,9 @@ namespace UIControlsLibrary
 
                     //Text = "DICOM Image Viewer: ";
                     // Show a plain grayscale image instead
-                    pixels8.Clear();
-                    pixels16.Clear();
-                    pixels24.Clear();
+                    //pixels8.Clear();
+                    //pixels16.Clear();
+                    //pixels24.Clear();
                     samplesPerPixel = 1;
 
                     imageWidth = (int)this.Width - 25;   // 25 is a magic number
@@ -870,13 +873,13 @@ namespace UIControlsLibrary
             if (e.Delta > 0)
             {
                 currentImageIndex++;
-                if (currentImageIndex == currentScan.Images.Count)
+                if (currentImageIndex >= currentScan.Images.Count)
                     currentImageIndex = 0;
             }
             else
             {
                 currentImageIndex--;
-                if (currentImageIndex == 0)
+                if (currentImageIndex <= 0)
                     currentImageIndex = currentScan.Images.Count - 1;
 
             }
