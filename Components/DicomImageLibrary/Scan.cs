@@ -27,6 +27,7 @@ namespace DicomImageLibrary
                 // srao test branch changes..
 
             });
+            dicomImages.Sort(delegate (DicomReader d1, DicomReader d2) { return d1.DicomFileName.CompareTo(d2.DicomFileName); });
 
         }
         public List<DicomReader> Images { get { return dicomImages; } }

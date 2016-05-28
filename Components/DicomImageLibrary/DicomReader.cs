@@ -167,6 +167,10 @@ namespace DicomImageLibrary
 
         public string DicomFileName
         {
+            get
+            {
+                return dicomFileName;
+            }
             set
             {
                 dicomFileName = value;
