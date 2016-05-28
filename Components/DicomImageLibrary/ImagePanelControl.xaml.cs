@@ -631,6 +631,7 @@ namespace DicomImageLibrary
                 newImage = false;
             }
         }
+
         public static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
