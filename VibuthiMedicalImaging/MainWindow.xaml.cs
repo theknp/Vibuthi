@@ -71,11 +71,13 @@ namespace VibuthiMedicalImaging
             if (odm.Show() == true)
             {
 
-                sc = new Scan(odm.SelectedFolder.Path.ToString());
-                
-                listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
+                if (odm.SelectedFolder != null)
+                {
+                    sc = new Scan(odm.SelectedFolder.Path.ToString());
+                    listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
 
-                ReadAndDisplayDicomFile(0);
+                    ReadAndDisplayDicomFile(0);
+                }
                 //DicomImage.Source = sc.Images[0].getBitmap() as ImageSource;
                 // MessageBox.Show(listScans.SelectedItems.Count.ToString());
                 //listScans.ItemsSource = Scans;
