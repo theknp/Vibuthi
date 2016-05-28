@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibuthiMedicalImaging", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomImageLibrary", "..\Components\DicomImageLibrary\DicomImageLibrary.csproj", "{1BFD3E45-D7A1-4EB5-BA19-8EA233CE41CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIControlsLibrary", "..\Components\UIControlsLibrary\UIControlsLibrary.csproj", "{FEB3314E-1FF9-4329-948B-7431F2C3D612}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1BFD3E45-D7A1-4EB5-BA19-8EA233CE41CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BFD3E45-D7A1-4EB5-BA19-8EA233CE41CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BFD3E45-D7A1-4EB5-BA19-8EA233CE41CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

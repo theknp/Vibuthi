@@ -15,8 +15,9 @@ using System.Windows.Shapes;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using DicomImageLibrary;
 
-namespace DicomImageLibrary
+namespace UIControlsLibrary
 {
     /// <summary>
     /// Interaction logic for ImagePanelControl.xaml
@@ -26,6 +27,19 @@ namespace DicomImageLibrary
 
         public enum ImageBitsPerPixel { Eight, Sixteen, TwentyFour };
         public enum ViewSettings { Zoom1_1, ZoomToFit };
+
+        List<byte> pixels8;
+        List<ushort> pixels16;
+        List<byte> pixels24; // 30 July 2010
+        int imageWidth;
+        int imageHeight;
+        int bitDepth;
+        int samplesPerPixel;  // Updated 30 July 2010
+        bool imageOpened;
+       
+        bool signedImage;
+        int maxPixelValue;    // Updated July 2012
+        int minPixelValue;
 
         List<byte> pix8;
         List<ushort> pix16;
@@ -65,12 +79,29 @@ namespace DicomImageLibrary
         int sizeImg;
         int sizeImg3;
         //MainForm mf;
+        Scan currentScan = null;
+        int currentImageIndex = 0;
 
         ImageBitsPerPixel bpp;
 
         public ViewSettings viewSettings;
         public bool viewSettingsChanged;
 
+
+        public Scan CurrentScan
+        {
+            get
+            {
+                return currentScan;
+            }
+            set
+            {
+                currentScan = value;
+                currentImageIndex = 0;
+                DisplayDicomFile(currentImageIndex);
+
+            }
+        }
         public ImagePanelControl()
         {
             InitializeComponent();
@@ -98,7 +129,13 @@ namespace DicomImageLibrary
 
             viewSettings = ViewSettings.ZoomToFit;
             viewSettingsChanged = false;
-
+            pixels8 = new List<byte>();
+            pixels16 = new List<ushort>();
+            pixels24 = new List<byte>();
+            imageOpened = false;
+            signedImage = false;
+            maxPixelValue = 0;
+            minPixelValue = 65535;
             PerformResize();
         }
 
@@ -164,6 +201,7 @@ namespace DicomImageLibrary
                     bmp.Dispose();
                 ResetValues();
                 ComputeLookUpTable8();
+                bmp = null;
                 bmp = new Bitmap(imgWidth, imgHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                 CreateImage24();
             }
@@ -214,6 +252,7 @@ namespace DicomImageLibrary
                 bmp.Dispose();
             ResetValues();
             ComputeLookUpTable16();
+            
             bmp = new Bitmap(imgWidth, imgHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             CreateImage16();
             if (resetScroll == true) ComputeScrollBarParameters();
@@ -374,33 +413,7 @@ namespace DicomImageLibrary
             }
         }
 
-        private void ImagePanel_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        {
-            Bitmap newimg = new Bitmap(300,300);
-            Graphics g = Graphics.FromImage(newimg);
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-
-            if (viewSettingsChanged || newImage)
-                g.Clear(System.Drawing.SystemColors.Control);
-
-            if (((bpp == ImageBitsPerPixel.Eight) && (pix8.Count > 0)) ||
-                 ((bpp == ImageBitsPerPixel.Sixteen) && (pix16.Count > 0)) ||
-                 ((bpp == ImageBitsPerPixel.TwentyFour) && (pix24.Count > 0)))
-            {
-                if (viewSettings == ViewSettings.Zoom1_1)
-                {
-                    SetScrollVisibility();
-                    g.DrawImage(bmp, hOffset, vOffset);
-                }
-                else // if(viewSettings == ViewSettings.ZoomToFit)
-                {
-                    ScaleImageKeepingAspectRatio(ref g, bmp, panWidth, panHeight);
-                }
-            }
-            g.Dispose();
-            viewSettingsChanged = false;
-            newImage = false;
-        }
+     
 
         // Adapted from Charles Petzold's code from his book: Programming Microsoft Windows With C#, 2001
         //  Chapter on Images and Bitmaps - method ScaleImageIsotropically
@@ -596,9 +609,10 @@ namespace DicomImageLibrary
             //System.Windows.Media.Pen myPen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Blue, 10);
             //Rect myRect = new Rect(0, 0, 500, 500);
             //dc.DrawRectangle(mySolidColorBrush, myPen, myRect);
+            if (bmp == null)
+                return;
 
-
-            Bitmap newimg = new Bitmap(500, 500);
+            Bitmap newimg = new Bitmap((int)this.ActualWidth, (int)this.ActualHeight );
             Graphics g = Graphics.FromImage(newimg);
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 
@@ -628,9 +642,10 @@ namespace DicomImageLibrary
 
                 dc.DrawImage(grayBitmapSource, myRect);
                 viewSettingsChanged = false;
+                newimg.Dispose();
                 newImage = false;
             }
-        }
+        }       
 
         public static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
         {
@@ -642,6 +657,231 @@ namespace DicomImageLibrary
                 IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
+        }
+
+        private void render_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+          
+        }
+        private void DisplayDicomFile(int index)
+        {
+
+
+            if (index >= 0 && index < currentScan.Images.Count)
+            {
+
+                DicomReader dd = currentScan.Images[index];
+
+                TypeOfDicomFile typeOfDicomFile = dd.typeofDicomFile;
+
+                if (typeOfDicomFile == TypeOfDicomFile.Dicom3File ||
+                    typeOfDicomFile == TypeOfDicomFile.DicomOldTypeFile)
+                {
+                    imageWidth = dd.width;
+                    imageHeight = dd.height;
+                    bitDepth = dd.bitsAllocated;
+                    winCentre = (int)dd.windowCentre;
+                    winWidth = (int)dd.windowWidth;
+                    samplesPerPixel = dd.samplesPerPixel;
+                    signedImage = dd.signedImage;
+
+                    //label1.Visible = true;
+                    //label2.Visible = true;
+                    //label3.Visible = true;
+                    //label4.Visible = true;
+                    //bnSave.Enabled = true;
+                    //bnTags.Enabled = true;
+                    //bnResetWL.Enabled = true;
+                    //label2.Text = imageWidth.ToString() + " X " + imageHeight.ToString();
+                    //if (samplesPerPixel == 1)
+                    //    label4.Text = bitDepth.ToString() + " bit";
+                    //else
+                    //    label4.Text = bitDepth.ToString() + " bit, " + samplesPerPixel +
+                    //        " samples per pixel";
+
+                    this.NewImage = true;
+                    //Text = "DICOM Image Viewer: " + fileNameOnly;
+
+                    if (samplesPerPixel == 1 && bitDepth == 8)
+                    {
+                        pixels8.Clear();
+                        pixels16.Clear();
+                        pixels24.Clear();
+                        dd.GetPixels8(ref pixels8);
+
+                        // This is primarily for debugging purposes, 
+                        //  to view the pixel values as ascii data.
+                        //if (true)
+                        //{
+                        //    System.IO.StreamWriter file = new System.IO.StreamWriter(
+                        //               "C:\\imageSigned.txt");
+
+                        //    for (int ik = 0; ik < pixels8.Count; ++ik)
+                        //        file.Write(pixels8[ik] + "  ");
+
+                        //    file.Close();
+                        //}
+
+                        minPixelValue = pixels8.Min();
+                        maxPixelValue = pixels8.Max();
+
+                        // Bug fix dated 24 Aug 2013 - for proper window/level of signed images
+                        // Thanks to Matias Montroull from Argentina for pointing this out.
+                        if (dd.signedImage)
+                        {
+                            winCentre -= char.MinValue;
+                        }
+
+                        if (Math.Abs(winWidth) < 0.001)
+                        {
+                            winWidth = maxPixelValue - minPixelValue;
+                        }
+
+                        if ((winCentre == 0) ||
+                            (minPixelValue > winCentre) || (maxPixelValue < winCentre))
+                        {
+                            winCentre = (maxPixelValue + minPixelValue) / 2;
+                        }
+
+                        this.SetParameters(ref pixels8, imageWidth, imageHeight,
+                            winWidth, winCentre, samplesPerPixel, true);//, this
+                    }
+
+                    if (samplesPerPixel == 1 && bitDepth == 16)
+                    {
+                        pixels16.Clear();
+                        pixels8.Clear();
+                        pixels24.Clear();
+                        dd.GetPixels16(ref pixels16);
+
+                        // This is primarily for debugging purposes, 
+                        //  to view the pixel values as ascii data.
+                        //if (true)
+                        //{
+                        //    System.IO.StreamWriter file = new System.IO.StreamWriter(
+                        //               "C:\\imageSigned.txt");
+
+                        //    for (int ik = 0; ik < pixels16.Count; ++ik)
+                        //        file.Write(pixels16[ik] + "  ");
+
+                        //    file.Close();
+                        //}
+
+                        minPixelValue = pixels16.Min();
+                        maxPixelValue = pixels16.Max();
+
+                        // Bug fix dated 24 Aug 2013 - for proper window/level of signed images
+                        // Thanks to Matias Montroull from Argentina for pointing this out.
+                        if (dd.signedImage)
+                        {
+                            winCentre -= short.MinValue;
+                        }
+
+                        if (Math.Abs(winWidth) < 0.001)
+                        {
+                            winWidth = maxPixelValue - minPixelValue;
+                        }
+
+                        if ((winCentre == 0) ||
+                            (minPixelValue > winCentre) || (maxPixelValue < winCentre))
+                        {
+                            winCentre = (maxPixelValue + minPixelValue) / 2;
+                        }
+
+                        this.Signed16Image = dd.signedImage;
+
+                        this.SetParameters(ref pixels16, imageWidth, imageHeight,
+                            winWidth, winCentre, true);//, this
+                    }
+
+                    if (samplesPerPixel == 3 && bitDepth == 8)
+                    {
+                        // This is an RGB colour image
+                        pixels8.Clear();
+                        pixels16.Clear();
+                        pixels24.Clear();
+                        dd.GetPixels24(ref pixels24);
+
+                        // This code segment is primarily for debugging purposes, 
+                        //    to view the pixel values as ascii data.
+                        //if (true)
+                        //{
+                        //    System.IO.StreamWriter file = new System.IO.StreamWriter(
+                        //                      "C:\\image24.txt");
+
+                        //    for (int ik = 0; ik < pixels24.Count; ++ik)
+                        //        file.Write(pixels24[ik] + "  ");
+
+                        //    file.Close();
+                        //}
+
+                        this.SetParameters(ref pixels24, imageWidth, imageHeight,
+                            winWidth, winCentre, samplesPerPixel, true);//, this
+                    }
+                }
+                else
+                {
+                    if (typeOfDicomFile == TypeOfDicomFile.DicomUnknownTransferSyntax)
+                    {
+                        System.Windows.MessageBox.Show("Sorry, I can't read a DICOM file with this Transfer Syntax.",
+                            "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("Sorry, I can't open this file. " +
+                            "This file does not appear to contain a DICOM image.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
+                    //Text = "DICOM Image Viewer: ";
+                    // Show a plain grayscale image instead
+                    pixels8.Clear();
+                    pixels16.Clear();
+                    pixels24.Clear();
+                    samplesPerPixel = 1;
+
+                    imageWidth = (int)this.Width - 25;   // 25 is a magic number
+                    imageHeight = (int)this.Height - 25; // Same magic number
+                    int iNoPix = imageWidth * imageHeight;
+
+                    for (int i = 0; i < iNoPix; ++i)
+                    {
+                        pixels8.Add(240);// 240 is the grayvalue corresponding to the Control colour
+                    }
+                    winWidth = 256;
+                    winCentre = 127;
+                    this.SetParameters(ref pixels8, imageWidth, imageHeight,
+                        winWidth, winCentre, samplesPerPixel, true);//, this
+                    this.InvalidateVisual();
+
+                    //label1.Visible = false;
+                    //label2.Visible = false;
+                    //label3.Visible = false;
+                    //label4.Visible = false;
+                    //bnSave.Enabled = false;
+                    //bnTags.Enabled = false;
+                    //bnResetWL.Enabled = false;
+                }
+            }
+        }
+
+        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                currentImageIndex++;
+                if (currentImageIndex == currentScan.Images.Count)
+                    currentImageIndex = 0;
+            }
+            else
+            {
+                currentImageIndex--;
+                if (currentImageIndex == 0)
+                    currentImageIndex = currentScan.Images.Count - 1;
+
+            }
+            DisplayDicomFile(currentImageIndex);
+
         }
     }
 }

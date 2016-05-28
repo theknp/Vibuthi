@@ -106,6 +106,10 @@
       <Project>{1bfd3e45-d7a1-4eb5-ba19-8ea233ce41cc}</Project>
       <Name>DicomImageLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Components\UIControlsLibrary\UIControlsLibrary.csproj">
+      <Project>{feb3314e-1ff9-4329-948b-7431f2c3d612}</Project>
+      <Name>UIControlsLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
