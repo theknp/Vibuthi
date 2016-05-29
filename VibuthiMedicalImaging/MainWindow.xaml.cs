@@ -16,6 +16,7 @@ using Gat.Controls.Model;
 using Gat.Controls.Framework;
 using Gat.Controls;
 using DicomImageLibrary;
+using ImageProcWrapper;
 
 namespace VibuthiMedicalImaging
 {
@@ -62,11 +63,14 @@ namespace VibuthiMedicalImaging
             signedImage = false;
             maxPixelValue = 0;
             minPixelValue = 65535;
+           
             //listScans.ItemsSource = Scans;
         }      
 
         private void btnLoadScan_Click(object sender, RoutedEventArgs e)
         {
+            ImageUtils util = new ImageUtils();
+            util.method(10, 20);
 
             if (odm.Show() == true)
             {

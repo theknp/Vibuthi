@@ -34,6 +34,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gat.Controls.OpenDialog">
       <HintPath>..\ThirdParty\Gat.Controls.OpenDialog.dll</HintPath>
@@ -105,6 +125,10 @@
     <ProjectReference Include="..\Components\DicomImageLibrary\DicomImageLibrary.csproj">
       <Project>{1bfd3e45-d7a1-4eb5-ba19-8ea233ce41cc}</Project>
       <Name>DicomImageLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Components\ImageProcWrapper\ImageProcWrapper.vcxproj">
+      <Project>{db048e3e-7090-4023-a3c5-f8727c254c84}</Project>
+      <Name>ImageProcWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Components\UIControlsLibrary\UIControlsLibrary.csproj">
       <Project>{feb3314e-1ff9-4329-948b-7431f2c3d612}</Project>

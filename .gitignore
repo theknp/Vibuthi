@@ -2,12 +2,19 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Components/DicomImageLibrary/bin/Debug/DicomImageLibrary.dll
+
 *.pdb
 *.suo
-/VibuthiMedicalImaging/bin/Debug/VibuthiMedicalImaging.vshost.exe
+
 *.cache
 Debug
-bin
+X64_debug
+X64_release
+
 Release
 *.user
+*.exp
+
+*.filters
+*.ipch
+*.db
