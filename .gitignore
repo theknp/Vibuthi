@@ -18,3 +18,4 @@ Release
 *.filters
 *.ipch
 *.db
+*.opendb

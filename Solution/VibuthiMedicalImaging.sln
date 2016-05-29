@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomImageLibrary", "..\Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIControlsLibrary", "..\Components\UIControlsLibrary\UIControlsLibrary.csproj", "{FEB3314E-1FF9-4329-948B-7431F2C3D612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessingEngine", "..\Components\ProcessingEngine\ProcessingEngine.csproj", "{7989A1F7-1642-462E-B05E-6B69C1A53398}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageProcInterface", "..\Components\ImageProc\ImageProcInterface.vcxproj", "{A35C8AB3-6841-430B-8265-4F5CB94B96C6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageProcWrapper", "..\Components\ImageProcWrapper\ImageProcWrapper.vcxproj", "{DB048E3E-7090-4023-A3C5-F8727C254C84}"
@@ -61,18 +59,6 @@ Global
 		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Release|x64.Build.0 = Release|x64
 		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Release|x86.ActiveCfg = Release|Any CPU
 		{FEB3314E-1FF9-4329-948B-7431F2C3D612}.Release|x86.Build.0 = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|x64.Build.0 = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Debug|x86.Build.0 = Debug|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|x64.ActiveCfg = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|x64.Build.0 = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|x86.ActiveCfg = Release|Any CPU
-		{7989A1F7-1642-462E-B05E-6B69C1A53398}.Release|x86.Build.0 = Release|Any CPU
 		{A35C8AB3-6841-430B-8265-4F5CB94B96C6}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{A35C8AB3-6841-430B-8265-4F5CB94B96C6}.Debug|Any CPU.Build.0 = Debug|x64
 		{A35C8AB3-6841-430B-8265-4F5CB94B96C6}.Debug|x64.ActiveCfg = Debug|x64
