@@ -71,7 +71,7 @@ namespace VibuthiMedicalImaging
         {
             ImageUtils util = new ImageUtils();
             util.method(10, 20);
-
+            
             if (odm.Show() == true)
             {
 
