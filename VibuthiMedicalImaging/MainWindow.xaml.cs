@@ -69,8 +69,8 @@ namespace VibuthiMedicalImaging
 
         private void btnLoadScan_Click(object sender, RoutedEventArgs e)
         {
-            ImageUtils util = new ImageUtils();
-            util.method(10, 20);
+            //ImageUtils util = new ImageUtils();
+           // util.method(10, 20);
             
             if (odm.Show() == true)
             {

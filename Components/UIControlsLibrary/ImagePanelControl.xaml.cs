@@ -915,8 +915,73 @@ namespace UIControlsLibrary
             }
             //DisplayDicomFile(currentImageIndex);
 
-            DisplayHCut();            
+            TestFloodFill();
+            //DisplayHCut();            
         }
+
+        private void TestFloodFill()
+        {
+            DicomReader dr = CurrentScan.Images[currentImageIndex];
+            List<ushort> localpixels16 = new List<ushort>();
+            dr.GetPixels16(ref localpixels16);
+
+            Mat m = new Mat(dr.width, dr.height);
+
+            for(int row = 0; row < dr.height; row ++)
+            {
+                for (int col = 0; col < dr.width; col++)
+                {
+                    m.put(col, row, localpixels16[row * dr.width + col]);
+                }
+            }
+
+            minPixelValue = localpixels16.Min();
+            maxPixelValue = localpixels16.Max();
+
+            int threshold = (minPixelValue + maxPixelValue) / 2;
+
+
+            FloodFill F = new FloodFill(m);
+
+            Mat m2 = F.floodFill((ushort)threshold, 100);
+
+            List<ushort> HCutpixels16 = new List<ushort>();
+
+            for (int row = 0; row < dr.height; row++)
+            {
+                for (int col = 0; col < dr.width; col++)
+                {
+                    HCutpixels16.Add(m.get(col, row));
+                }
+            }
+
+            minPixelValue = HCutpixels16.Min();
+            maxPixelValue = HCutpixels16.Max();
+
+            // Bug fix dated 24 Aug 2013 - for proper window/level of signed images
+            // Thanks to Matias Montroull from Argentina for pointing this out.
+            if (dr.signedImage)
+            {
+                winCentre -= short.MinValue;
+            }
+
+            if (Math.Abs(winWidth) < 0.001)
+            {
+                winWidth = maxPixelValue - minPixelValue;
+            }
+
+            if ((winCentre == 0) ||
+                (minPixelValue > winCentre) || (maxPixelValue < winCentre))
+            {
+                winCentre = (maxPixelValue + minPixelValue) / 2;
+            }
+
+            this.Signed16Image = dr.signedImage;
+
+            this.SetParameters(ref HCutpixels16, imageWidth, imageHeight,
+                winWidth, winCentre, true);//, this
+        }
+
         private void  DisplayHCut()
         {
             int imageWidth = 0;

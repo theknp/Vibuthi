@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DicomImageLibrary
 {
-    class Mat
+    public class Mat
     {
         ushort [,] data;
-        public int width
+        int width;
+        int height;
+        public int Width
         {
             get { return width; }
             set { width = value; }
         }
-        public int height
+        public int Height
         {
             get { return height; }
             set { height = value; }
         }
-        Mat(int w, int h)
+        public Mat(int w, int h)
         {
             data = new ushort[w, h];
             this.width = w;

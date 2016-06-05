@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace DicomImageLibrary
 {
-    class FloodFill
+    public class FloodFill
     {
         private int maxSize;
         private int[] stackArray;
@@ -89,14 +89,14 @@ namespace DicomImageLibrary
                     int ix = kx + x;
                     if (ix < 0)
                         ix = 0;
-                    if (ix >= finalImage.width)
-                        ix = finalImage.width - 1;
+                    if (ix >= finalImage.Width)
+                        ix = finalImage.Width - 1;
 
                     int iy = ky + y;
                     if (iy < 0)
                         iy = 0;
-                    if (iy >= finalImage.height)
-                        iy = finalImage.height - 1;
+                    if (iy >= finalImage.Height)
+                        iy = finalImage.Height - 1;
                     ushort d = finalImage.get(iy, ix);
                     if (d == 255)
                     {
@@ -121,9 +121,9 @@ namespace DicomImageLibrary
 
         private void thresholdImputImage(int threshold)
         {
-            for(int x = 0; x < inputMat.width; x++)
+            for(int x = 0; x < inputMat.Width; x++)
             {
-                for(int y = 0; y < inputMat.height; y++)
+                for(int y = 0; y < inputMat.Height; y++)
                 {
                     if (inputMat.get(x, y) < threshold)
                         inputMat.put(x, y, 0);
@@ -139,12 +139,14 @@ namespace DicomImageLibrary
             ushort labele = 0;
             regionsCount = 0;
             thresholdImputImage(intenThreshold);
+
+
             finalImage = inputMat.clone();
             inputMat.copyTo(finalImage);
 		
-		    for (int y = 0; y< inputMat.height; y++)
+		    for (int y = 0; y< inputMat.Height; y++)
 		    {
-			    for (int x = 0; x< inputMat.width; x++)
+			    for (int x = 0; x< inputMat.Width; x++)
 			    {
 				    ushort d = finalImage.get(y, x);
 				    if (d == 255)
@@ -170,9 +172,9 @@ namespace DicomImageLibrary
 
         private void measureReasionSizes()
         {
-            for (int y = 0; y < finalImage.height; y++)
+            for (int y = 0; y < finalImage.Height; y++)
             {
-                for (int x = 0; x < finalImage.width; x++)
+                for (int x = 0; x < finalImage.Width; x++)
                 {
                     ushort d = finalImage.get(y, x);
                     if (d != 0)
@@ -183,9 +185,9 @@ namespace DicomImageLibrary
 
         void thresholdRegions(int threashold)
         {
-            for (int y = 0; y < finalImage.height; y++)
+            for (int y = 0; y < finalImage.Height; y++)
             {
-                for (int x = 0; x < finalImage.width; x++)
+                for (int x = 0; x < finalImage.Width; x++)
                 {
                     ushort d = finalImage.get(y, x);
                     if (regionSize[(int)d] <= threashold)
