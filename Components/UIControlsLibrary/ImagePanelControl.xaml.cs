@@ -81,6 +81,8 @@ namespace UIControlsLibrary
         //MainForm mf;
         Scan currentScan = null;
         int currentImageIndex = 0;
+        int HCutPosition = 0;
+        int VCutPosition = 0;
 
         ImageBitsPerPixel bpp;
 
@@ -98,6 +100,9 @@ namespace UIControlsLibrary
             {
                 currentScan = value;
                 currentImageIndex = 0;
+                
+                HCutPosition = currentScan.Images[0].height / 2;
+                VCutPosition = currentScan.Images[0].width / 2;
                 DisplayDicomFile(currentImageIndex);
 
             }
@@ -667,11 +672,8 @@ namespace UIControlsLibrary
         }
         private void DisplayDicomFile(int index)
         {
-
-
             if (index >= 0 && index < currentScan.Images.Count)
             {
-
                 DicomReader dd = currentScan.Images[index];
 
                 TypeOfDicomFile typeOfDicomFile = dd.typeofDicomFile;
@@ -883,8 +885,110 @@ namespace UIControlsLibrary
                     currentImageIndex = currentScan.Images.Count - 1;
 
             }
-            DisplayDicomFile(currentImageIndex);
 
+            if (e.Delta > 0)
+            {
+                HCutPosition++;
+                if (HCutPosition >= currentScan.Images[0].height)
+                    HCutPosition = 0;
+            }
+            else
+            {
+                HCutPosition--;
+                if (HCutPosition <= 0)
+                    HCutPosition = currentScan.Images[0].height - 1;
+
+            }
+
+            if (e.Delta > 0)
+            {
+                VCutPosition++;
+                if (VCutPosition >= currentScan.Images[0].width)
+                    VCutPosition = 0;
+            }
+            else
+            {
+                VCutPosition--;
+                if (VCutPosition <= 0)
+                    VCutPosition = currentScan.Images[0].width - 1;
+
+            }
+            //DisplayDicomFile(currentImageIndex);
+
+            DisplayHCut();            
+        }
+        private void  DisplayHCut()
+        {
+            int imageWidth = 0;
+            int imageHeight = 0;
+
+            List<ushort> HCutpixels16 = new List<ushort>();
+            currentScan.HorizontalReconstruct(ref HCutpixels16, HCutPosition,ref  imageWidth,ref imageHeight);
+
+            DicomReader dd = currentScan.Images[0];
+
+            minPixelValue = HCutpixels16.Min();
+            maxPixelValue = HCutpixels16.Max();
+
+            // Bug fix dated 24 Aug 2013 - for proper window/level of signed images
+            // Thanks to Matias Montroull from Argentina for pointing this out.
+            if (dd.signedImage)
+            {
+                winCentre -= short.MinValue;
+            }
+
+            if (Math.Abs(winWidth) < 0.001)
+            {
+                winWidth = maxPixelValue - minPixelValue;
+            }
+
+            if ((winCentre == 0) ||
+                (minPixelValue > winCentre) || (maxPixelValue < winCentre))
+            {
+                winCentre = (maxPixelValue + minPixelValue) / 2;
+            }
+
+            this.Signed16Image = dd.signedImage;
+
+            this.SetParameters(ref HCutpixels16, imageWidth, imageHeight,
+                winWidth, winCentre, true);//, this
+        }
+
+        private void DisplayVCut()
+        {
+            int imageWidth = 0;
+            int imageHeight = 0;
+
+            List<ushort> VCutpixels16 = new List<ushort>();
+            currentScan.VerticalReconstruct(ref VCutpixels16, HCutPosition,ref imageWidth,ref imageHeight);
+
+            DicomReader dd = currentScan.Images[0];
+
+            minPixelValue = VCutpixels16.Min();
+            maxPixelValue = VCutpixels16.Max();
+
+            // Bug fix dated 24 Aug 2013 - for proper window/level of signed images
+            // Thanks to Matias Montroull from Argentina for pointing this out.
+            if (dd.signedImage)
+            {
+                winCentre -= short.MinValue;
+            }
+
+            if (Math.Abs(winWidth) < 0.001)
+            {
+                winWidth = maxPixelValue - minPixelValue;
+            }
+
+            if ((winCentre == 0) ||
+                (minPixelValue > winCentre) || (maxPixelValue < winCentre))
+            {
+                winCentre = (maxPixelValue + minPixelValue) / 2;
+            }
+
+            this.Signed16Image = dd.signedImage;
+
+            this.SetParameters(ref VCutpixels16, imageWidth, imageHeight,
+                winWidth, winCentre, true);//, this
         }
     }
 }

@@ -105,6 +105,25 @@ namespace VibuthiMedicalImaging
 
         }
 
-        
+        private void btnReconstruct_Click(object sender, RoutedEventArgs e)
+        {
+            ComputeAlignOffsets(sc.Images[0], sc.Images[1]);
+        }
+
+        private void ComputeAlignOffsets(DicomReader dicomReader1, DicomReader dicomReader2)
+        {
+            List<ushort> pixels1 = new List<ushort>();
+            List<ushort> pixels2 = new List<ushort>();
+
+            dicomReader1.GetPixels16(ref pixels1);
+            dicomReader2.GetPixels16(ref pixels2);
+            int width = dicomReader1.width;
+            int height = dicomReader1.width;
+
+
+            ImageUtils util = new ImageUtils();
+            List<double> corrImage = new List<double>();
+            //util.matchImages(pixels1.ToArray(), width, height, pixels2, width, height, corrImage);
+        }
     }
 }

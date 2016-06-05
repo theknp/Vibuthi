@@ -125,7 +125,7 @@ namespace DicomImageLibrary
         List<byte> pixels8;
         List<byte> pixels24; // 8 bits bit depth, 3 samples per pixel
         List<ushort> pixels16;
-        List<int> pixels16Int;
+       
 
 
         public DicomReader()
@@ -771,11 +771,13 @@ namespace DicomImageLibrary
 
             if (samplesPerPixel == 1 && bitsAllocated == 16)
             {
-                if (pixels16 != null)
-                    pixels16.Clear();
-                if (pixels16Int != null)
-                    pixels16Int.Clear();
+                List<int> pixels16Int;
 
+                if (pixels16 != null)
+                {
+                    pixels16.Clear();
+                    pixels16 = null;
+                }
                 pixels16 = new List<ushort>();
                 pixels16Int = new List<int>();
                 int numPixels = width * height;
@@ -828,6 +830,7 @@ namespace DicomImageLibrary
                 }
 
                 pixels16Int.Clear();
+
             }
 
             // 30 July 2010 - to account for Ultrasound images

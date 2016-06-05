@@ -17,16 +17,20 @@ namespace ImageProcWrapper {
 		}
 		int method(int a, int b)
 		{
-			Testing t;
+			ImageProcessingOps t;
 			return t.addTwoNumbers(a, b);
 		}
-		/*static void matchImages2(unsigned short[] origImage, int numCols, int numRows, unsigned short[] templateImage, int numColsTemplate, int numRowsTemplate, double[] corrImage)
+		int test(int a, int b)
 		{
-
-		}*/
+			return a - b;
+		}
 		
+		void matchImages(unsigned short origImage[], int numCols, int numRows, unsigned short templateImage[], int numColsTemplate, int numRowsTemplate, double corrImage[])
+		{
+			ImageProcessingOps t;
+
+			t.matchImages(origImage, numCols, numRows, templateImage, numColsTemplate, numRowsTemplate, corrImage);
+		}		
 	};
-	
-	
 
 }
