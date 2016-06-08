@@ -25,7 +25,7 @@ namespace UIControlsLibrary
     public partial class ImagePanelControl : System.Windows.Controls.UserControl
     {
 
-        public enum ImageBitsPerPixel { Eight, Sixteen, TwentyFour };
+       
         public enum ViewSettings { Zoom1_1, ZoomToFit };
 
         List<byte> pixels8;
@@ -470,6 +470,7 @@ namespace UIControlsLibrary
             }
         }
 
+        
         // Linear interpolation here too
         private void ComputeLookUpTable16()
         {
@@ -576,7 +577,18 @@ namespace UIControlsLibrary
             winMin = winMax - winWidth;
             UpdateMainForm();
         }
-
+        ImageDisplayControl idc;
+        public ImageDisplayControl IDC
+        {
+            get
+            {
+                return idc;
+            }
+            set
+            {
+                idc = value;
+            }
+        }
         private void ImagePanelControl_Resize(object sender, EventArgs e)
         {
             PerformResize();
@@ -640,6 +652,7 @@ namespace UIControlsLibrary
                 grayBitmapSource.BeginInit();               
                 grayBitmapSource.Source = CreateBitmapSourceFromBitmap(newimg);
                 grayBitmapSource.EndInit();
+
 
                 dc.DrawImage(grayBitmapSource, myRect);
                 

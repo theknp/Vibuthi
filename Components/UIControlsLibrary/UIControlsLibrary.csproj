@@ -50,12 +50,19 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageDisplayControl.xaml.cs">
+      <DependentUpon>ImageDisplayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImagePanelControl.xaml.cs">
       <DependentUpon>ImagePanelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ImageDisplayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ImagePanelControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

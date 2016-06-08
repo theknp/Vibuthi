@@ -35,6 +35,19 @@ int Testing::addTwoMats()
 
 	return 1;
 }
+
+void Testing::matchImages(unsigned short *origImage, int numCols, int numRows, unsigned short *templateImage, int numColsTemplate, int numRowsTemplate, float &xShift, float &yShift)
+{
+	for (int i = 0; i < numRows; i++)
+	{
+		for (int j = 0; j < numCols; j++)
+		{
+			xShift += origImage[i * 10 + j];
+			yShift += templateImage[i * 10 + j];
+		}
+	}
+	
+}
 //
 //void matchImages(unsigned short *origImage, int numCols, int numRows,
 //	unsigned short *templateImage, int numColsTemplate, int numRowsTemplate,

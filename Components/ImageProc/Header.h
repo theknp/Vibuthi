@@ -14,6 +14,6 @@ public:
 
 	int addTwoMats();
 
-	//void matchImages(unsigned short *origImage, int numCols, int numRows, unsigned short *templateImage, int numColsTemplate, int numRowsTemplate, double *corrImage);
+	void matchImages(unsigned short *origImage, int numCols, int numRows, unsigned short *templateImage, int numColsTemplate, int numRowsTemplate, float &xShift, float &yShift);
 
 };

@@ -69,8 +69,18 @@ namespace VibuthiMedicalImaging
 
         private void btnLoadScan_Click(object sender, RoutedEventArgs e)
         {
-            ImageUtils util = new ImageUtils();
-            util.method(10, 20);
+            //ImageUtils util = new ImageUtils();
+            //util.method(10, 20);
+            //ushort[] origimag = new ushort[100];
+            //ushort[] tempImage = new ushort[100];
+            //for(ushort i =0; i< 100;i++)
+            //{
+            //    origimag[i] = i;
+            //    tempImage[i] = (ushort)(i + 1);
+            //}
+            //float xshift = 0,yshift = 0;
+            //ImageUtils.matchImages2(origimag, 10, 10, tempImage, 10, 10, ref xshift,  ref yshift);
+            //ImageUtils.matchImages2()
 
             if (odm.Show() == true)
             {
@@ -105,6 +115,9 @@ namespace VibuthiMedicalImaging
 
         }
 
-        
+        private void IDcontrol_LocationChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

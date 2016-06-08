@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DicomImageLibrary"
+             xmlns:local="clr-namespace:UIControlsLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" MouseWheel="UserControl_MouseWheel">
-    <Grid x:Name="render" IsVisibleChanged="render_IsVisibleChanged" MouseWheel="render_MouseWheel">
+    <Grid x:Name="render" IsVisibleChanged="render_IsVisibleChanged" MouseWheel="render_MouseWheel" Margin="-972,-608,-873,-575">
         <ScrollBar x:Name="hScrollBar" HorizontalAlignment="Left" Margin="12,284,0,11" RenderTransformOrigin="0.5,0.5" Width="284" Orientation="Horizontal">
             <ScrollBar.RenderTransform>
                 <TransformGroup>
