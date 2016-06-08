@@ -48,7 +48,7 @@
 
 
             </Grid.RowDefinitions>
-            <Button Name="btnReconstruct" Margin="17,5,117,26" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">Reconstruct</Button>
+            <Button Name="btnReconstruct" Margin="17,5,117,26" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btnReconstruct_Click">Reconstruct</Button>
             <StackPanel Orientation="Horizontal" Margin="17,21,33,0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button x:Name="btnShowVCut" Margin="5" Width="80" Content="SHow V-Cut"/>
                 <TextBlock x:Name="txtVcut" Width=" 50" Margin="5"><Run Text="150"/></TextBlock>

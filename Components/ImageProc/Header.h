@@ -1,19 +1,17 @@
 #pragma once
- class __declspec(dllexport) Testing
+ class __declspec(dllexport) ImageProcessingOps
 {
 public:
-	 Testing()
+	ImageProcessingOps()
 	{
 	}
 	int addTwoNumbers(int a, int b)
 	{
-		//return a + b;
-
-		return addTwoMats();
+		return a + b;		
 	}
 
 	int addTwoMats();
 
-	void matchImages(unsigned short *origImage, int numCols, int numRows, unsigned short *templateImage, int numColsTemplate, int numRowsTemplate, float &xShift, float &yShift);
+	void matchImages(unsigned short *origImage, int numCols, int numRows, unsigned short *templateImage, int numColsTemplate, int numRowsTemplate, double *corrImage);
 
 };

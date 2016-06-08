@@ -70,18 +70,8 @@ namespace VibuthiMedicalImaging
         private void btnLoadScan_Click(object sender, RoutedEventArgs e)
         {
             //ImageUtils util = new ImageUtils();
-            //util.method(10, 20);
-            //ushort[] origimag = new ushort[100];
-            //ushort[] tempImage = new ushort[100];
-            //for(ushort i =0; i< 100;i++)
-            //{
-            //    origimag[i] = i;
-            //    tempImage[i] = (ushort)(i + 1);
-            //}
-            //float xshift = 0,yshift = 0;
-            //ImageUtils.matchImages2(origimag, 10, 10, tempImage, 10, 10, ref xshift,  ref yshift);
-            //ImageUtils.matchImages2()
-
+           // util.method(10, 20);
+            
             if (odm.Show() == true)
             {
 
@@ -115,9 +105,25 @@ namespace VibuthiMedicalImaging
 
         }
 
-        private void IDcontrol_LocationChanged(object sender, EventArgs e)
+        private void btnReconstruct_Click(object sender, RoutedEventArgs e)
         {
+            ComputeAlignOffsets(sc.Images[0], sc.Images[1]);
+        }
 
+        private void ComputeAlignOffsets(DicomReader dicomReader1, DicomReader dicomReader2)
+        {
+            List<ushort> pixels1 = new List<ushort>();
+            List<ushort> pixels2 = new List<ushort>();
+
+            dicomReader1.GetPixels16(ref pixels1);
+            dicomReader2.GetPixels16(ref pixels2);
+            int width = dicomReader1.width;
+            int height = dicomReader1.width;
+
+
+            ImageUtils util = new ImageUtils();
+            List<double> corrImage = new List<double>();
+            //util.matchImages(pixels1.ToArray(), width, height, pixels2, width, height, corrImage);
         }
     }
 }
