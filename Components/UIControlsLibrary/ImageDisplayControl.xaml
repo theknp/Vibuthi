@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:UIControlsLibrary"
+             xmlns:local="clr-namespace:UIControlsLibrary"             
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -27,10 +27,11 @@
         
             <Slider Height="25" Grid.Row="0" Grid.ColumnSpan="2" Name="sliderHorix"  HorizontalAlignment="Stretch" DockPanel.Dock="Top"  Minimum="0" Maximum="100" Ticks="512" ValueChanged="sliderHorix_ValueChanged" TickPlacement="BottomRight"  TickFrequency="5"/>
             <Grid Margin="5" Grid.Row="1" Grid.Column="0">
-                <Image  Name="imageCentre"></Image>
+                <!--<Image  Name="imageCentre" Margin="0,0,42,0"></Image>-->
                 <Line x:Name="lineV" Width="1" VerticalAlignment="Stretch" Fill="Black" Stroke="Black" OpacityMask="Black" SnapsToDevicePixels="True" StrokeThickness="5" />
                 <Line x:Name="lineH"  Height="1" HorizontalAlignment="Stretch" Fill="#FF5C4040" Stroke="Black" OpacityMask="Black" SnapsToDevicePixels="True" StrokeThickness="5" />
-      </Grid>
+                <local:ImagePanelControl x:Name="IPControl"  Margin="0" Grid.Row ="0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible"/>
+            </Grid>
             <Slider Name="sliderVertic" Grid.Row="1" Grid.Column="1" Width="25" Orientation="Vertical" Margin="0" DockPanel.Dock="Right"   Minimum="0" Maximum="100" Ticks="512" ValueChanged="sliderVertic_ValueChanged" TickPlacement="TopLeft" TickFrequency="5" />
         
         </Grid>
@@ -44,10 +45,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
+            <local:ImagePanelControl x:Name="IPControlLeft"  Margin="0" Grid.Row ="0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible"/>
+            <local:ImagePanelControl x:Name="IPControlRight"  Margin="0" Grid.Row ="0" Grid.Column="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Visibility="Visible"/>
+            
             <Image x:Name="imageLeft"  Grid.Column="0" VerticalAlignment="Top"/>
             <Image x:Name="imageRight"  Grid.Column="0" VerticalAlignment="Top"/>
-
-
         </Grid>
     </Grid>
 </UserControl>

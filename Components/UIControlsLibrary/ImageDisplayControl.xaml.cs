@@ -25,6 +25,29 @@ namespace UIControlsLibrary
         {
             InitializeComponent();
         }
+        Scan currentScan = null;       
+             
+        //public ViewSettings viewSettings;
+        public bool viewSettingsChanged;
+        public Scan CurrentScan
+        {
+            get
+            {
+                return currentScan;
+            }
+            set
+            {
+                currentScan = value;
+                IPControl.PanelType = 1;
+                IPControl.CurrentScan = currentScan;
+
+                IPControlLeft.PanelType = 2;
+                IPControlLeft.CurrentScan = currentScan;
+
+                IPControlRight.PanelType = 3;
+                IPControlRight.CurrentScan = currentScan;
+            }
+        }
 
         public byte[] ImageLeftBytes
         {
@@ -48,7 +71,7 @@ namespace UIControlsLibrary
                 byte[] array = value;
                 using (System.IO.MemoryStream ms = new System.IO.MemoryStream(array))
                 {
-                    BitmapImage image = new BitmapImage();
+                    BitmapImage image = new BitmapImage();                    
                     image.BeginInit();
                     image.StreamSource = ms;
                     image.EndInit();
@@ -67,13 +90,14 @@ namespace UIControlsLibrary
                     image.BeginInit();
                     image.StreamSource = ms;
                     image.EndInit();
-                    ImageCentre = image;
+           //         ImageCentre = image;
                 }
             }
         }
+        
         //public Scan CurrentScan
         //{
-            
+
         //}
         private BitmapImage ImageLeft
         {
@@ -100,19 +124,19 @@ namespace UIControlsLibrary
             }
         }
 
-        private BitmapImage ImageCentre
-        {
-            get
-            {
-                return imageCentre.Source as BitmapImage;
+        //private BitmapImage ImageCentre
+        //{
+        //    get
+        //    {
+        //        return imageCentre.Source as BitmapImage;
                
-            }
-            set
-            {
-                imageCentre.Source = value;
-                centreLines();
-            }
-        }
+        //    }
+        //    set
+        //    {
+        //        imageCentre.Source = value;
+        //        centreLines();
+        //    }
+        //}
 
         int pixLocX;
         int pixLocY;
@@ -149,13 +173,13 @@ namespace UIControlsLibrary
         public delegate void LocationChangedEventHandler(object sender, EventArgs e);
         private void sliderHorix_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            PixLocX = (int)(imageCentre.Source.Width * e.NewValue);
+            //PixLocX = (int)(imageCentre.Source.Width * e.NewValue);
             //txtBlock.Text = sliderHorix.Value.ToString() + " X " + sliderVertic.Value.ToString();
         }
 
         private void sliderVertic_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            PixLocY = (int)(imageCentre.Source.Height * e.NewValue);
+            //PixLocY = (int)(imageCentre.Source.Height * e.NewValue);
             //txtBlock.Text = sliderHorix.Value.ToString() + " X " + sliderVertic.Value.ToString();
         }
     }

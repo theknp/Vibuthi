@@ -29,23 +29,10 @@ namespace VibuthiMedicalImaging
         List<CheckBoxListItem> Scans = new List<CheckBoxListItem>();
         OpenDialogViewModel odm;
         OpenDialogView od;
-
+        
+        List<Scan> LoadedScans = new List<Scan>();
         Scan sc = null;
-        DicomReader dd;
-        List<byte> pixels8;
-        List<ushort> pixels16;
-        List<byte> pixels24; // 30 July 2010
-        int imageWidth;
-        int imageHeight;
-        int bitDepth;
-        int samplesPerPixel;  // Updated 30 July 2010
-        bool imageOpened;
-        double winCentre;
-        double winWidth;
-        bool signedImage;
-        int maxPixelValue;    // Updated July 2012
-        int minPixelValue;
-
+ 
 
         public MainWindow()
         {
@@ -55,14 +42,6 @@ namespace VibuthiMedicalImaging
             
             odm.StartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-
-            pixels8 = new List<byte>();
-            pixels16 = new List<ushort>();
-            pixels24 = new List<byte>();
-            imageOpened = false;
-            signedImage = false;
-            maxPixelValue = 0;
-            minPixelValue = 65535;
            
             //listScans.ItemsSource = Scans;
         }      
@@ -78,10 +57,10 @@ namespace VibuthiMedicalImaging
                 if (odm.SelectedFolder != null)
                 {
                     sc = new Scan(odm.SelectedFolder.Path.ToString());
-                    listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
-
-                    IPcontrol.CurrentScan = sc;
-                    //ReadAndDisplayDicomFile(0);
+                    //listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
+                    listScans.Items.Add(odm.SelectedFolder.Name.ToString());
+                    IDcontrol.CurrentScan = sc;
+                    LoadedScans.Add(sc);
                 }
                 //DicomImage.Source = sc.Images[0].getBitmap() as ImageSource;
                 // MessageBox.Show(listScans.SelectedItems.Count.ToString());
@@ -92,8 +71,15 @@ namespace VibuthiMedicalImaging
 
         private void listScans_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
-
+            var cb = sender as ListBox;
+            if (cb.SelectedIndex < LoadedScans.Count)
+            {
+                IDcontrol.CurrentScan = LoadedScans[cb.SelectedIndex];
+            }
+            else
+            {
+                MessageBox.Show(" Selected Index is  " + cb.SelectedIndex.ToString() + " Load Count is " + LoadedScans.Count.ToString());
+            }            
         }
 
         private void scanItemCheckBox_Click(object sender, RoutedEventArgs e)

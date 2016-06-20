@@ -90,6 +90,8 @@ namespace UIControlsLibrary
         public bool viewSettingsChanged;
 
 
+        public int PanelType = 1;   // 1 for center, 2 for Horizontal, 3 for Vertical
+
         public Scan CurrentScan
         {
             get
@@ -100,10 +102,21 @@ namespace UIControlsLibrary
             {
                 currentScan = value;
                 currentImageIndex = 0;
-                
+
                 HCutPosition = currentScan.Images[0].height / 2;
                 VCutPosition = currentScan.Images[0].width / 2;
-                DisplayDicomFile(currentImageIndex);
+                if (PanelType == 1)
+                {
+                    DisplayDicomFile();
+                }
+                if (PanelType == 2)
+                {
+                    DisplayHCut();
+                }
+                if (PanelType == 3)
+                {
+                    DisplayVCut();
+                }
 
             }
         }
@@ -683,8 +696,9 @@ namespace UIControlsLibrary
         {
           
         }
-        private void DisplayDicomFile(int index)
+        private void DisplayDicomFile()
         {
+            int index = currentImageIndex;
             if (index >= 0 && index < currentScan.Images.Count)
             {
                 DicomReader dd = currentScan.Images[index];
@@ -884,52 +898,58 @@ namespace UIControlsLibrary
         }
 
         private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (e.Delta > 0)
+        {  
+            if (PanelType == 1)
             {
-                currentImageIndex++;
-                if (currentImageIndex >= currentScan.Images.Count)
-                    currentImageIndex = 0;
-            }
-            else
-            {
-                currentImageIndex--;
-                if (currentImageIndex <= 0)
-                    currentImageIndex = currentScan.Images.Count - 1;
-
-            }
-
-            if (e.Delta > 0)
-            {
-                HCutPosition++;
-                if (HCutPosition >= currentScan.Images[0].height)
-                    HCutPosition = 0;
-            }
-            else
-            {
-                HCutPosition--;
-                if (HCutPosition <= 0)
-                    HCutPosition = currentScan.Images[0].height - 1;
-
+                if (e.Delta > 0)
+                {
+                    currentImageIndex++;
+                    if (currentImageIndex >= currentScan.Images.Count)
+                        currentImageIndex = 0;
+                }
+                else
+                {
+                    currentImageIndex--;
+                    if (currentImageIndex <= 0)
+                        currentImageIndex = currentScan.Images.Count - 1;
+                }
+                DisplayDicomFile();
             }
 
-            if (e.Delta > 0)
+            if (PanelType == 2)
             {
-                VCutPosition++;
-                if (VCutPosition >= currentScan.Images[0].width)
-                    VCutPosition = 0;
+
+                if (e.Delta > 0)
+                {
+                    HCutPosition++;
+                    if (HCutPosition >= currentScan.Images[0].height)
+                        HCutPosition = 0;
+                }
+                else
+                {
+                    HCutPosition--;
+                    if (HCutPosition <= 0)
+                        HCutPosition = currentScan.Images[0].height - 1;
+
+                }
+                DisplayHCut();
             }
-            else
+            if (PanelType == 3)
             {
-                VCutPosition--;
-                if (VCutPosition <= 0)
-                    VCutPosition = currentScan.Images[0].width - 1;
-
-            }
-            //DisplayDicomFile(currentImageIndex);
-
-            TestFloodFill();
-            //DisplayHCut();            
+                if (e.Delta > 0)
+                {
+                    VCutPosition++;
+                    if (VCutPosition >= currentScan.Images[0].width)
+                        VCutPosition = 0;
+                }
+                else
+                {
+                    VCutPosition--;
+                    if (VCutPosition <= 0)
+                        VCutPosition = currentScan.Images[0].width - 1;
+                }                
+                DisplayVCut();
+            }                  
         }
 
         private void TestFloodFill()
@@ -1038,7 +1058,7 @@ namespace UIControlsLibrary
             int imageHeight = 0;
 
             List<ushort> VCutpixels16 = new List<ushort>();
-            currentScan.VerticalReconstruct(ref VCutpixels16, HCutPosition,ref imageWidth,ref imageHeight);
+            currentScan.VerticalReconstruct(ref VCutpixels16, VCutPosition,ref imageWidth,ref imageHeight);
 
             DicomReader dd = currentScan.Images[0];
 

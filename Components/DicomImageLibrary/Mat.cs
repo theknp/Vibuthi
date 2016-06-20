@@ -51,7 +51,5 @@ namespace DicomImageLibrary
             copyTo(newMat);
             return newMat;
         }
-
-
     }
 }
