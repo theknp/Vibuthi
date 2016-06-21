@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VibuthiMedicalImaging"
         xmlns:ImagePanelControl1="clr-namespace:UIControlsLibrary;assembly=UIControlsLibrary"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="VibuthiMedicalImaging" WindowState="Maximized" Width="500" Height="300">
 
     <!--<Grid>
         <Grid.ColumnDefinitions>

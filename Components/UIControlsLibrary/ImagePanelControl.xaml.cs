@@ -67,7 +67,6 @@ namespace UIControlsLibrary
         System.Windows.Point ptWLDown;
         double changeValWidth = 500;
         double changeValCentre = 250;
-        bool rightMouseDown = false;
         bool imageAvailable = false;
         bool signed16Image = false;
 
@@ -138,7 +137,7 @@ namespace UIControlsLibrary
             ptWLDown = new System.Windows.Point();
             changeValWidth = 0.5;
             changeValCentre = 20.0;
-            rightMouseDown = false;
+            
             imageAvailable = false;
             signed16Image = false;
 
@@ -510,78 +509,6 @@ namespace UIControlsLibrary
             }
         }
 
-        private void panel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (imageAvailable == true)
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    ptWLDown.X = e.X;
-                    ptWLDown.Y = e.Y;
-                    rightMouseDown = true;
-                    Cursor = System.Windows.Input.Cursors.Hand;
-                }
-            }
-        }
-
-        // Mouse-move is made to perform window-level
-        private void panel_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            DetermineMouseSensitivity();
-            if (rightMouseDown == true)
-            {
-                winWidthBy2 = winWidth / 2;
-                winWidth = winMax - winMin;
-                winCentre = winMin + winWidthBy2;
-
-                deltaX = (int)((ptWLDown.X - e.X) * changeValWidth);
-                deltaY = (int)((ptWLDown.Y - e.Y) * changeValCentre);
-
-                winCentre -= deltaY;
-                winWidth -= deltaX;
-
-                if (winWidth < 2) winWidth = 2;
-                winWidthBy2 = winWidth / 2;
-
-                winMax = winCentre + winWidthBy2;
-                winMin = winCentre - winWidthBy2;
-
-                if (winMin >= winMax) winMin = winMax - 1;
-                if (winMax <= winMin) winMax = winMin + 1;
-
-                ptWLDown.X = e.X;
-                ptWLDown.Y = e.Y;
-
-                UpdateMainForm();
-                if (bpp == ImageBitsPerPixel.Eight)
-                {
-                    ComputeLookUpTable8();
-                    CreateImage8();
-                }
-                else if (bpp == ImageBitsPerPixel.Sixteen)
-                {
-                    ComputeLookUpTable16();
-                    CreateImage16();
-                }
-                else // (bpp == ImageBitsPerPixel.TwentyFour)
-                {
-                    ComputeLookUpTable8();
-                    CreateImage24();
-                }
-
-                InvalidateVisual();
-            }
-        }
-
-        private void panel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (rightMouseDown == true)
-            {
-                rightMouseDown = false;
-                Cursor = System.Windows.Input.Cursors.Arrow;
-            }
-        }
-
         // Update the graph control on the main form
         private void UpdateMainForm()
         {
@@ -692,10 +619,6 @@ namespace UIControlsLibrary
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private void render_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-          
-        }
         private void DisplayDicomFile()
         {
             int index = currentImageIndex;
@@ -897,7 +820,7 @@ namespace UIControlsLibrary
             }
         }
 
-        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void render_MouseWheel(object sender, MouseWheelEventArgs e)
         {  
             if (PanelType == 1)
             {
@@ -1087,6 +1010,73 @@ namespace UIControlsLibrary
 
             this.SetParameters(ref VCutpixels16, imageWidth, imageHeight,
                 winWidth, winCentre, true);//, this
+        }
+
+        private void render_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            DetermineMouseSensitivity();
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                winWidthBy2 = winWidth / 2;
+                winWidth = winMax - winMin;
+                winCentre = winMin + winWidthBy2;
+
+                deltaX = (int)((ptWLDown.X - e.GetPosition(this).X) * changeValWidth);
+                deltaY = (int)((ptWLDown.Y - e.GetPosition(this).Y) * changeValCentre);
+
+                winCentre -= deltaY;
+                winWidth -= deltaX;
+
+                if (winWidth < 2) winWidth = 2;
+                winWidthBy2 = winWidth / 2;
+
+                winMax = winCentre + winWidthBy2;
+                winMin = winCentre - winWidthBy2;
+
+                if (winMin >= winMax) winMin = winMax - 1;
+                if (winMax <= winMin) winMax = winMin + 1;
+
+                ptWLDown.X = e.GetPosition(this).X;
+                ptWLDown.Y = e.GetPosition(this).Y;
+
+                UpdateMainForm();
+                if (bpp == ImageBitsPerPixel.Eight)
+                {
+                    ComputeLookUpTable8();
+                    CreateImage8();
+                }
+                else if (bpp == ImageBitsPerPixel.Sixteen)
+                {
+                    ComputeLookUpTable16();
+                    CreateImage16();
+                }
+                else // (bpp == ImageBitsPerPixel.TwentyFour)
+                {
+                    ComputeLookUpTable8();
+                    CreateImage24();
+                }
+
+                InvalidateVisual();
+            }
+        }
+
+        private void render_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (imageAvailable == true)
+            {
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    ptWLDown.X = e.GetPosition(this).X;
+                    ptWLDown.Y = e.GetPosition(this).Y;
+                    Cursor = System.Windows.Input.Cursors.Hand;
+                }
+            }
+        }
+
+
+        private void render_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Cursor = System.Windows.Input.Cursors.Arrow;   
         }
     }
 }
