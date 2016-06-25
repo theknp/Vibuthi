@@ -13,6 +13,10 @@ namespace DicomImageLibrary
         ScanInfo info;
         List<DicomReader> dicomImages = new List<DicomReader>();
 
+        public int currentImageIndex = 0;
+        public int HCutPosition = 0;
+        public int VCutPosition = 0;
+
         public Scan(string path)
         {
             String[] files = System.IO.Directory.GetFiles(path);

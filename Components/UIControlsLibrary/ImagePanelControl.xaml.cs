@@ -78,10 +78,7 @@ namespace UIControlsLibrary
         int sizeImg;
         int sizeImg3;
         //MainForm mf;
-        Scan currentScan = null;
-        int currentImageIndex = 0;
-        int HCutPosition = 0;
-        int VCutPosition = 0;
+        Scan currentScan = null;       
 
         ImageBitsPerPixel bpp;
 
@@ -100,10 +97,10 @@ namespace UIControlsLibrary
             set
             {
                 currentScan = value;
-                currentImageIndex = 0;
+                currentScan.currentImageIndex = 0;
 
-                HCutPosition = currentScan.Images[0].height / 2;
-                VCutPosition = currentScan.Images[0].width / 2;
+                currentScan.HCutPosition = currentScan.Images[0].height / 2;
+                currentScan.VCutPosition = currentScan.Images[0].width / 2;
                 if (PanelType == 1)
                 {
                     DisplayDicomFile();
@@ -116,7 +113,6 @@ namespace UIControlsLibrary
                 {
                     DisplayVCut();
                 }
-
             }
         }
         public ImagePanelControl()
@@ -605,6 +601,41 @@ namespace UIControlsLibrary
                 newimg.Dispose();
                 newImage = false;
             }
+
+            int XLineIndex = 0;
+            int YLineIndex = 0;
+            if(PanelType == 1)
+            {
+                if(panWidth < imageWidth)
+                    XLineIndex = currentScan.VCutPosition * panWidth / imageWidth;
+                else
+                    XLineIndex = hOffset + currentScan.VCutPosition;
+                if (panHeight < imageHeight)
+                    YLineIndex = currentScan.HCutPosition * panHeight / imageHeight;
+                else
+                    YLineIndex = vOffset + currentScan.HCutPosition;
+            }
+            if( PanelType == 2)
+            {
+                XLineIndex = currentScan.VCutPosition;
+                YLineIndex = currentScan.currentImageIndex;
+            }
+            if (PanelType == 3)
+            {
+                XLineIndex = currentScan.HCutPosition;
+                YLineIndex = currentScan.currentImageIndex;
+            }
+
+            System.Windows.Media.Pen p = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, 2);
+
+            System.Windows.Point p1 = new System.Windows.Point(0, YLineIndex);
+            System.Windows.Point p2 = new System.Windows.Point(1000, YLineIndex);            
+            dc.DrawLine( p, p1, p2);
+
+
+            System.Windows.Point p3 = new System.Windows.Point(XLineIndex, 0);
+            System.Windows.Point p4 = new System.Windows.Point(XLineIndex, 1000);            
+            dc.DrawLine(p, p3, p4);
         }       
 
         public static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
@@ -621,7 +652,7 @@ namespace UIControlsLibrary
 
         private void DisplayDicomFile()
         {
-            int index = currentImageIndex;
+            int index = currentScan.currentImageIndex;
             if (index >= 0 && index < currentScan.Images.Count)
             {
                 DicomReader dd = currentScan.Images[index];
@@ -826,15 +857,15 @@ namespace UIControlsLibrary
             {
                 if (e.Delta > 0)
                 {
-                    currentImageIndex++;
-                    if (currentImageIndex >= currentScan.Images.Count)
-                        currentImageIndex = 0;
+                    currentScan.currentImageIndex++;
+                    if (currentScan.currentImageIndex >= currentScan.Images.Count)
+                        currentScan.currentImageIndex = 0;
                 }
                 else
                 {
-                    currentImageIndex--;
-                    if (currentImageIndex <= 0)
-                        currentImageIndex = currentScan.Images.Count - 1;
+                    currentScan.currentImageIndex--;
+                    if (currentScan.currentImageIndex <= 0)
+                        currentScan.currentImageIndex = currentScan.Images.Count - 1;
                 }
                 DisplayDicomFile();
             }
@@ -844,15 +875,15 @@ namespace UIControlsLibrary
 
                 if (e.Delta > 0)
                 {
-                    HCutPosition++;
-                    if (HCutPosition >= currentScan.Images[0].height)
-                        HCutPosition = 0;
+                    currentScan.HCutPosition++;
+                    if (currentScan.HCutPosition >= currentScan.Images[0].height)
+                        currentScan.HCutPosition = 0;
                 }
                 else
                 {
-                    HCutPosition--;
-                    if (HCutPosition <= 0)
-                        HCutPosition = currentScan.Images[0].height - 1;
+                    currentScan.HCutPosition--;
+                    if (currentScan.HCutPosition <= 0)
+                        currentScan.HCutPosition = currentScan.Images[0].height - 1;
 
                 }
                 DisplayHCut();
@@ -861,15 +892,15 @@ namespace UIControlsLibrary
             {
                 if (e.Delta > 0)
                 {
-                    VCutPosition++;
-                    if (VCutPosition >= currentScan.Images[0].width)
-                        VCutPosition = 0;
+                    currentScan.VCutPosition++;
+                    if (currentScan.VCutPosition >= currentScan.Images[0].width)
+                        currentScan.VCutPosition = 0;
                 }
                 else
                 {
-                    VCutPosition--;
-                    if (VCutPosition <= 0)
-                        VCutPosition = currentScan.Images[0].width - 1;
+                    currentScan.VCutPosition--;
+                    if (currentScan.VCutPosition <= 0)
+                        currentScan.VCutPosition = currentScan.Images[0].width - 1;
                 }                
                 DisplayVCut();
             }                  
@@ -877,7 +908,7 @@ namespace UIControlsLibrary
 
         private void TestFloodFill()
         {
-            DicomReader dr = CurrentScan.Images[currentImageIndex];
+            DicomReader dr = CurrentScan.Images[currentScan.currentImageIndex];
             List<ushort> localpixels16 = new List<ushort>();
             dr.GetPixels16(ref localpixels16);
 
@@ -944,7 +975,7 @@ namespace UIControlsLibrary
             int imageHeight = 0;
 
             List<ushort> HCutpixels16 = new List<ushort>();
-            currentScan.HorizontalReconstruct(ref HCutpixels16, HCutPosition,ref  imageWidth,ref imageHeight);
+            currentScan.HorizontalReconstruct(ref HCutpixels16, currentScan.HCutPosition,ref  imageWidth,ref imageHeight);
 
             DicomReader dd = currentScan.Images[0];
 
@@ -981,7 +1012,7 @@ namespace UIControlsLibrary
             int imageHeight = 0;
 
             List<ushort> VCutpixels16 = new List<ushort>();
-            currentScan.VerticalReconstruct(ref VCutpixels16, VCutPosition,ref imageWidth,ref imageHeight);
+            currentScan.VerticalReconstruct(ref VCutpixels16, currentScan.VCutPosition,ref imageWidth,ref imageHeight);
 
             DicomReader dd = currentScan.Images[0];
 
