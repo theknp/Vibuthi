@@ -26,14 +26,14 @@ namespace VibuthiMedicalImaging
     public partial class MainWindow : Window
     {
         int count = 1;
-        List<CheckBoxListItem> Scans = new List<CheckBoxListItem>();
+        List<CheckBoxListItem> ScanList = new List<CheckBoxListItem>();
         OpenDialogViewModel odm;
         OpenDialogView od;
         
         List<Scan> LoadedScans = new List<Scan>();
-        Scan sc = null;
- 
+        
 
+        FusionAlgoCoordinator fusionAlgo;
         public MainWindow()
         {
           od = new OpenDialogView();
@@ -56,9 +56,11 @@ namespace VibuthiMedicalImaging
 
                 if (odm.SelectedFolder != null)
                 {
+                    Scan sc = null;
                     sc = new Scan(odm.SelectedFolder.Path.ToString());
                     //listScans.Items.Add(new CheckBoxListItem(true, odm.SelectedFolder.Name.ToString() + count));
                     listScans.Items.Add(odm.SelectedFolder.Name.ToString());
+
                     IDcontrol.CurrentScan = sc;
                     LoadedScans.Add(sc);
                 }
@@ -72,8 +74,31 @@ namespace VibuthiMedicalImaging
         private void listScans_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var cb = sender as ListBox;
+            //Before cahnging the scan get the current index of displayed scan
+
+            int sourceimgIndex = IDcontrol.CurrentScan.CurrentImageIndex;
+
             if (cb.SelectedIndex < LoadedScans.Count)
             {
+                int imageIndex = 0;
+                if (SynchronizeScans)
+                {
+                    Boolean isRefScan = cb.SelectedIndex == 0;
+                    AlignInfo aInfo = fusionAlgo.GetAlginData(sourceimgIndex, !isRefScan);
+                    if (isRefScan)
+                        imageIndex = aInfo.parentImageIndex;
+                    else
+                        imageIndex = aInfo.matchingImageIndex;
+                }
+                else
+                {
+                    imageIndex = sourceimgIndex;
+
+                    if (imageIndex >= LoadedScans[cb.SelectedIndex].Images.Count)
+                        imageIndex = LoadedScans[cb.SelectedIndex].Images.Count - 1;
+
+                }
+                LoadedScans[cb.SelectedIndex].CurrentImageIndex = imageIndex;
                 IDcontrol.CurrentScan = LoadedScans[cb.SelectedIndex];
             }
             else
@@ -91,25 +116,57 @@ namespace VibuthiMedicalImaging
 
         }
 
-        private void btnReconstruct_Click(object sender, RoutedEventArgs e)
+        //private void btnReconstruct_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ComputeAlignOffsets(sc.Images[0], sc.Images[1]);
+        //}
+
+        //private void ComputeAlignOffsets(DicomReader dicomReader1, DicomReader dicomReader2)
+        //{
+        //    List<ushort> pixels1 = new List<ushort>();
+        //    List<ushort> pixels2 = new List<ushort>();
+
+        //    dicomReader1.GetPixels16(ref pixels1);
+        //    dicomReader2.GetPixels16(ref pixels2);
+        //    int width = dicomReader1.width;
+        //    int height = dicomReader1.width;
+
+
+        //    ImageUtils util = new ImageUtils();
+        //    List<double> corrImage = new List<double>();
+        //    //util.matchImages(pixels1.ToArray(), width, height, pixels2, width, height, corrImage);
+        //}
+
+        private void FuseScans_Click(object sender, RoutedEventArgs e)
         {
-            ComputeAlignOffsets(sc.Images[0], sc.Images[1]);
+            if(LoadedScans.Count == 2)
+            {
+                fusionAlgo = new FusionAlgoCoordinator();
+                fusionAlgo.PerformFusion(ref LoadedScans);
+                SynchronizeScans = true;
+                updateButtonStatus();
+            }
+            else
+            {
+                MessageBox.Show("Load 2 Scans for Fusion!");
+            }
         }
-
-        private void ComputeAlignOffsets(DicomReader dicomReader1, DicomReader dicomReader2)
+        public Boolean SynchronizeScans = false;
+        private void SyncScans_Click(object sender, RoutedEventArgs e)
         {
-            List<ushort> pixels1 = new List<ushort>();
-            List<ushort> pixels2 = new List<ushort>();
-
-            dicomReader1.GetPixels16(ref pixels1);
-            dicomReader2.GetPixels16(ref pixels2);
-            int width = dicomReader1.width;
-            int height = dicomReader1.width;
-
-
-            ImageUtils util = new ImageUtils();
-            List<double> corrImage = new List<double>();
-            //util.matchImages(pixels1.ToArray(), width, height, pixels2, width, height, corrImage);
+            SynchronizeScans = !SynchronizeScans;
+            updateButtonStatus();
+        }
+        public void updateButtonStatus()
+        {             
+            if(SynchronizeScans)
+            {
+                SyncScans.Content = "ReleaseScans";
+            }
+            else
+            {
+                SyncScans.Content = "SyncScans";
+            }
         }
     }
 }

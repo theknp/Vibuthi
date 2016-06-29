@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibuthiMedicalImaging", "..\VibuthiMedicalImaging\VibuthiMedicalImaging.csproj", "{C6D8720B-B49F-4DCE-BCF4-4C49974725FA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A35C8AB3-6841-430B-8265-4F5CB94B96C6} = {A35C8AB3-6841-430B-8265-4F5CB94B96C6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomImageLibrary", "..\Components\DicomImageLibrary\DicomImageLibrary.csproj", "{1BFD3E45-D7A1-4EB5-BA19-8EA233CE41CC}"
 EndProject

@@ -13,11 +13,32 @@ namespace DicomImageLibrary
         ScanInfo info;
         List<DicomReader> dicomImages = new List<DicomReader>();
 
-        public int currentImageIndex = 0;
+        int currentImageIndex = 0;
         public int HCutPosition = 0;
         public int VCutPosition = 0;
 
-        public Scan(string path)
+        public int CurrentImageIndex
+        {
+            get { return currentImageIndex; }
+            set
+            {
+                if (value < 0)
+                {
+                    currentImageIndex = dicomImages.Count;
+                }
+                else if (value >= dicomImages.Count)
+                {
+                    currentImageIndex = 0;
+                }
+                else
+                {
+                    currentImageIndex = value;
+                }
+            }
+        }
+   
+
+    public Scan(string path)
         {
             String[] files = System.IO.Directory.GetFiles(path);
             //dicomImages = new DicomReader[files.Length];
@@ -33,8 +54,14 @@ namespace DicomImageLibrary
             });
             
             dicomImages.Sort(delegate (DicomReader d1, DicomReader d2) { return d1.DicomFileName.CompareTo(d2.DicomFileName); });
+
+            currentImageIndex = 0;
+
+            HCutPosition = Images[0].height / 2;
+            VCutPosition = Images[0].width / 2;
+
         }
-        
+
         public List<DicomReader> Images { get { return dicomImages; } }
 
 

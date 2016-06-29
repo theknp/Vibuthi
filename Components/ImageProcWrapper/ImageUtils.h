@@ -7,6 +7,7 @@
 #include "../ImageProc/ImageProcessUtility.h"
 using namespace System;
 
+
 namespace ImageProcWrapper {
 
 	public ref class ImageUtils
@@ -52,14 +53,36 @@ namespace ImageProcWrapper {
 			return true;
 
 		}
-
 			
-		void matchImages(unsigned short origImage[], int numCols, int numRows, unsigned short templateImage[], int numColsTemplate, int numRowsTemplate, double corrImage[])
+		/*void matchImages(unsigned short origImage[], int numCols, int numRows, unsigned short templateImage[], int numColsTemplate, int numRowsTemplate, double corrImage[])
 		{
 			ImageProcessingOps t;
 
 			t.matchImages(origImage, numCols, numRows, templateImage, numColsTemplate, numRowsTemplate, corrImage);
-		}		
+		}	*/
+
+		void matchImages1(IntPtr origImage, int numCols, int numRows, IntPtr templateImage, int numColsTemplate, int numRowsTemplate,  int %xShift, int %yShift, double %score)
+		{
+			ImageProcessingOps t;
+
+			unsigned short *b;			
+			b = (unsigned short*)(origImage.ToPointer());
+			
+			unsigned short *c;
+			c = (unsigned short*)(templateImage.ToPointer());
+
+			//unsigned short *origImage_local = (unsigned short *)origImage.GetObjectData();
+			int xShiftLocal;
+			int yShiftLocal;
+			double scoreLocal;
+
+			t.matchImages(b, numCols, numRows, c, numColsTemplate, numRowsTemplate, &xShiftLocal, &yShiftLocal, &scoreLocal);
+
+			xShift = xShiftLocal;
+			yShift = yShiftLocal;
+			score = scoreLocal;
+
+		}
 	};
 
 }
